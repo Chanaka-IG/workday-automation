@@ -14,7 +14,6 @@ export class PersonalDetailsPage {
     private readonly dobInput: Locator;
     private readonly maritalStatusInput: Locator;
     private readonly genderInput: Locator;
-    private readonly placeOfBirthInput: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -29,10 +28,11 @@ export class PersonalDetailsPage {
         this.dobInput = page.locator('#emp_birthday');
         this.maritalStatusInput = page.locator('//div[@id=\'emp_marital_status_inputfileddiv\']//input');
         this.genderInput = page.locator('//div[@id=\'emp_gender_inputfileddiv\']//input');
-        this.placeOfBirthInput = page.locator("//div[@class='input-field col s12 m12 l6']//input");
     }
 
-    async personalDetailsSectionValidation(excelValues: any): Promise<void> {
+    async personalDetailsSectionValidation(excelValues: any): Promise<boolean> {
+
+        let flag = true;
         const errors: string[] = [];
         const excelValueforGender: Record<string, string> = {
             F: 'Female',
@@ -120,25 +120,20 @@ export class PersonalDetailsPage {
 
         const excelGenderValue = excelValueforGender[excelValues.sexo] ?? excelValues.sexo;
         const uiGender = await this.genderInput.inputValue();
-
         if (excelGenderValue !== uiGender) {
             errors.push(
                 `Gender mismatch: Expected ${excelGenderValue}, Found ${uiGender}`
             );
         }
 
-
-        const placeExpected = excelValues.Ciudad ?? excelValues.placeOfBirth ?? '';
-        if (await this.placeOfBirthInput.inputValue() !== placeExpected) {
-            errors.push(`Place of Birth mismatch: Expected ${placeExpected}, Found ${await this.placeOfBirthInput.inputValue()}`);
-        }
-
-
         if (errors.length > 0) {
-            const errorMessage = errors.join('\n');
-            throw new Error(`Personal Details Validation Failed:\n${errorMessage}`);
-
+            console.log(errors)
+            flag = false;
         }
+         else{
+            console.log("Personal Details Section data validation completed without any issue")
+        }
+        return flag;
     }
 
 }

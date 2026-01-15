@@ -23,13 +23,16 @@ export class SalaryDetaillsPage {
 
     }
 
-    async salaryDetailsSectionValidation(excelValues: any): Promise<void> {
-
+    async salaryDetailsSectionValidation(excelValues: any): Promise<boolean> {
+        let flag = true;
         let errors: any[] = []
         await this.salaryDetailsSection.click();
         await this.createDocument.waitFor({ state: 'visible', timeout: 4000 })
 
-        if (await this.annualBasic.inputValue() !== excelValues.salario) {
+        const annualBasicSalary = (await this.annualBasic.inputValue()).replace(/,/g, '');
+
+
+        if (annualBasicSalary !== excelValues.salario) {
             errors.push(`Annual basic salary mismatched. Actual ${await this.annualBasic.inputValue()}. Expected ${excelValues.salario}`)
         }
         if (await this.nomina.inputValue() !== "QUINCENAL") {
@@ -42,6 +45,14 @@ export class SalaryDetaillsPage {
             errors.push(`Regimen mismatched. Actual ${await this.regimen.inputValue()}. Expected ${excelValues.regimeanFiscal}`)
         }
 
-    console.log(errors)    
+        if (errors.length > 0) {
+            console.log(errors)
+            flag = false;
+        }
+         else{
+            console.log("Salary Details Section data validation completed without any issue")
+        }
+        return flag;
+
     }
 }

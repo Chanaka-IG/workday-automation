@@ -22,7 +22,8 @@ export class JobDetailsPage {
         this.joinedDateInput = page.locator('#joined_date');
     }
 
-    async jobDetailsSectionValidation(excelValues: any): Promise<void> {
+    async jobDetailsSectionValidation(excelValues: any): Promise<boolean> {
+        let flag = true;
         const errors: string[] = [];
         await this.jobDetailsSection.click();
         if (await this.jobTitleInput.inputValue() !== excelValues.puesto) {
@@ -56,6 +57,11 @@ export class JobDetailsPage {
         if (errors.length > 0) {
             const errorMessage = errors.join('\n');
             throw new Error(`Job Details Validation Failed:\n${errorMessage}`);
+            flag = false
         }
+        else{
+            console.log("Job Details Section data validation completed without any issue")
+        }
+        return flag;
     }
 }    
