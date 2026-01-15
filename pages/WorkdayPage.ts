@@ -12,7 +12,7 @@ export class WorkdayPage {
     private readonly employeeSearchInput: Locator;
     private readonly searchDropdown: Locator;
     private readonly employeeListCard: Locator;
-
+    private readonly logoutBtn: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -23,12 +23,17 @@ export class WorkdayPage {
         this.employeeSearchInput = page.locator('#employee_name_quick_filter_employee_list_value');
         this.searchDropdown = page.locator('#employee_name_quick_filter_employee_list_dropdown');
         this.employeeListCard = page.locator('#employeeListTable');
+        this.logoutBtn = page.getByRole('link', {name : 'Log Out'});
     }
 
     async loginAsAdmin() {
         await this.usernameInput.fill(ENV.adminUsername);
         await this.passwordInput.fill(ENV.adminPassword);
         await this.loginButton.click();
+    }
+
+        async logout() {
+        await this.logoutBtn.click();
     }
 
     async navigateToEmployeeList() {
