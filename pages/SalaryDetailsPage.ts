@@ -1,8 +1,9 @@
 
 import { Page, Locator, expect } from '@playwright/test';
+import { EmployeeData } from '../types/EmployeeData';
 
 
-export class SalaryDetaillsPage {
+export class SalaryDetailsPage {
 
     private readonly page: Page;
     private readonly salaryDetailsSection: Locator;
@@ -23,14 +24,14 @@ export class SalaryDetaillsPage {
 
     }
 
-    async salaryDetailsSectionValidation(excelValues: any): Promise<boolean> {
+    async salaryDetailsSectionValidation(excelValues: EmployeeData): Promise<boolean> {
         let flag = true;
-        let errors: any[] = []
+        let errors: string[] = []
         await this.salaryDetailsSection.click();
+
         await this.createDocument.waitFor({ state: 'visible', timeout: 4000 })
 
         const annualBasicSalary = (await this.annualBasic.inputValue()).replace(/,/g, '');
-
 
         if (annualBasicSalary !== excelValues.salario) {
             errors.push(`Annual basic salary mismatched. Actual ${await this.annualBasic.inputValue()}. Expected ${excelValues.salario}`)
@@ -49,7 +50,7 @@ export class SalaryDetaillsPage {
             console.log(errors)
             flag = false;
         }
-         else{
+        else {
             console.log("Salary Details Section data validation completed without any issue")
         }
         return flag;

@@ -1,5 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { ENV } from '../config/env';
+import { Page, Locator } from '@playwright/test';
 
 export class PersonalDetailsPage {
     private readonly page: Page;
@@ -65,7 +64,7 @@ export class PersonalDetailsPage {
             console.warn('Error parsing birth date:', e);
             formattedDate = String(excelValues.nacimento ?? '');
         }
-
+        await this.personalDetailsSection.waitFor();
         await this.personalDetailsSection.click();
 
         if (await this.firstNameInput.inputValue() !== excelValues.Nombre) {

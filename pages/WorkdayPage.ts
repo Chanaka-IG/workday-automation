@@ -1,6 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { ENV } from '../config/env';
-import { time } from 'node:console';
 
 
 export class WorkdayPage {
@@ -68,14 +67,13 @@ export class WorkdayPage {
             return flag;
         }
         catch (error) {
-            console.error('Error in findTheEmployeeAndNavigate:', error);
+            throw(error)
         }
 
     }
 
     async navigateToProfile(employeeID: string) {
         await this.page.getByRole('link', { name: employeeID }).first().click();
-        await this.page.waitForTimeout(8000);
     }
 
 }

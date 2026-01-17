@@ -1,6 +1,9 @@
+import { EmployeeData } from '../types/EmployeeData';
+import { Worksheet } from 'exceljs';
+
 export class ReadExcel {
 
-    async readExcel(worksheet: any, startRow = 2): Promise<any[]> {
+    async readExcel(worksheet: Worksheet, startRow = 2): Promise<EmployeeData[]> {
 
         const keys = [
             'No', 'Nombre', 'ApellidoPaterno', 'ApellidoMaterno', 'EMPRESA', 'CALLE',
@@ -19,7 +22,7 @@ export class ReadExcel {
 
         // 🔁 Loop through all rows
         for (let rowNumber = 2; rowNumber <= worksheet.actualRowCount; rowNumber++) {
-            const row = worksheet.getRow(rowNumber);
+            const row:any = worksheet.getRow(rowNumber);
 
             if (!row || !row.values || row.values.length === 0) {
                 continue; // skip empty rows
@@ -31,7 +34,7 @@ export class ReadExcel {
                 (_value: any, index: number) => !ignoreIndexes.includes(index)
             );
 
-            const normalizedValues = filteredValues.map((value:any, index:any) => {
+            const normalizedValues = filteredValues.map((value: any, index: number) => {
 
                 // 1️⃣ Formula result
                 if (value && typeof value === 'object' && 'result' in value) {

@@ -7,3 +7,6 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 /config/env.ts
+# Environment variables
+.env
+.env.local
